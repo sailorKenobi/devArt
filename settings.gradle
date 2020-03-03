@@ -1,0 +1,2 @@
+rootProject.name='devArt'
+include ':app'

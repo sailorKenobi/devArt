@@ -2,8 +2,9 @@ package ru.sailorkenobi.devart
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import ru.sailorkenobi.devart.dummy.DummyContent
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), RecentFragment.OnListFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,4 +16,10 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.main_fragment_container, recentFragment)
         fragmentTransaction.commit()
     }
+
+    override fun onListFragmentInteraction(item: DummyContent.DummyItem?) {
+        TODO("Not yet implemented")
+    }
+
+
 }

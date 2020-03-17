@@ -57,7 +57,7 @@ class RecentFragment : Fragment() {
 
     fun testRequest() {
         lifecycleScope.launch {
-            val res = HttpGet("https://www.deviantart.com")
+            val res = GetWithToken("https://www.deviantart.com/api/v1/oauth2/browse/newest?limit=5")
             Log.d("HttpGet", res)
         }
     }

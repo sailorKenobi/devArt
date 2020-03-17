@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_recent.view.*
  * TODO: Replace the implementation with code for your data type.
  */
 class RecentRecyclerViewAdapter(
-    private val mValues: List<DummyItem>,
+    private val mValues: MutableList<GalleryItem>,
     private val mListener: OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<RecentRecyclerViewAdapter.ViewHolder>() {
 
@@ -33,6 +33,12 @@ class RecentRecyclerViewAdapter(
         }
     }
 
+    fun setItems(newItems: List<GalleryItem>) {
+        mValues.clear()
+        mValues.addAll(newItems)
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_recent, parent, false)
@@ -42,7 +48,7 @@ class RecentRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
         //holder.mIdView.text = item.id
-        holder.mContentView.text = item.content
+        holder.mContentView.text = item.title
 
         with(holder.mView) {
             tag = item

@@ -3,17 +3,16 @@ package ru.sailorkenobi.devart
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
-import ru.sailorkenobi.devart.dummy.DummyContent
+import kotlinx.coroutines.withContext
 import ru.sailorkenobi.devart.dummy.DummyContent.DummyItem
 
 /**
@@ -27,6 +26,9 @@ class RecentFragment : Fragment() {
     private var columnCount = 2
 
     private var listener: OnListFragmentInteractionListener? = null
+
+    lateinit var dummyItemsList: MutableList<DummyItem>
+    private lateinit var recyclerViewAdapter: RecentRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,16 +45,35 @@ class RecentFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_recent_list, container, false)
 
-        testRequest()
+        //testRequest()
+
+        var itemsList = mutableListOf<GalleryItem>()
+        var dummyItemsList = mutableListOf<DummyItem>()
 
         // Set the adapter
         if (view is RecyclerView) {
+            recyclerViewAdapter = RecentRecyclerViewAdapter(itemsList, listener)
             with(view) {
                 layoutManager = GridLayoutManager(context, columnCount)
-                adapter = RecentRecyclerViewAdapter(DummyContent.ITEMS, listener)
+                adapter = recyclerViewAdapter
             }
         }
+
+        lifecycleScope.launch {
+            itemsList = getLatest()
+            //Log.d("showItems", "items count ${itemsList.count()}")
+            withContext(Dispatchers.Main) {
+                recyclerViewAdapter.setItems(itemsList)
+            }
+        }
+
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        //
     }
 
     fun testRequest() {

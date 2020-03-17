@@ -2,6 +2,7 @@ package ru.sailorkenobi.devart
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 import ru.sailorkenobi.devart.dummy.DummyContent
 import ru.sailorkenobi.devart.dummy.DummyContent.DummyItem
@@ -31,6 +34,7 @@ class RecentFragment : Fragment() {
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
+
     }
 
     override fun onCreateView(
@@ -38,6 +42,8 @@ class RecentFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_recent_list, container, false)
+
+        testRequest()
 
         // Set the adapter
         if (view is RecyclerView) {
@@ -49,12 +55,19 @@ class RecentFragment : Fragment() {
         return view
     }
 
+    fun testRequest() {
+        lifecycleScope.launch {
+            val res = HttpGet("https://www.deviantart.com")
+            Log.d("HttpGet", res)
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnListFragmentInteractionListener) {
             listener = context
         } else {
-            throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
+            //throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
         }
     }
 

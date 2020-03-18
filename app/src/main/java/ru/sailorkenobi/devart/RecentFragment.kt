@@ -13,7 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import ru.sailorkenobi.devart.RetrofitInstance.retrofitInstance
 import ru.sailorkenobi.devart.dummy.DummyContent.DummyItem
+import ru.sailorkenobi.devart.model.Result
+import ru.sailorkenobi.devart.model.ResultsList
+
 
 /**
  * A fragment representing a list of Items.
@@ -30,8 +37,14 @@ class RecentFragment : Fragment() {
     lateinit var dummyItemsList: MutableList<DummyItem>
     private lateinit var recyclerViewAdapter: RecentRecyclerViewAdapter
 
+    private lateinit var getNewestDataService: GetNewestDataService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        getNewestDataService = retrofitInstance!!.create<GetNewestDataService>(
+            GetNewestDataService::class.java
+        )
 
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
@@ -48,7 +61,10 @@ class RecentFragment : Fragment() {
         //testRequest()
 
         var itemsList = mutableListOf<GalleryItem>()
-        var dummyItemsList = mutableListOf<DummyItem>()
+        //var dummyItemsList = mutableListOf<DummyItem>()
+
+        val token = ""
+        var recentCall = getNewestDataService.get("Bearer ${token}")
 
         // Set the adapter
         if (view is RecyclerView) {
@@ -60,7 +76,25 @@ class RecentFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            itemsList = getLatest()
+            //itemsList = getLatest()
+
+            if (recentCall != null) {
+                recentCall.enqueue(object : Callback<ResultsList?> {
+                    override fun onResponse(
+                        call: Call<ResultsList?>,
+                        response: Response<ResultsList?>
+                    ) {
+                        Log.d("RetroFit", "onResponse")
+                        processResults(response.body()?.results)
+                        //generateRecentList(response.body().getNoticeArrayList())
+                    }
+
+                    override fun onFailure(call: Call<ResultsList?>?, t: Throwable) {
+                        Log.d("RetroFit", "onFailure")
+                    }
+                })
+            }
+
             //Log.d("showItems", "items count ${itemsList.count()}")
             withContext(Dispatchers.Main) {
                 recyclerViewAdapter.setItems(itemsList)
@@ -68,6 +102,19 @@ class RecentFragment : Fragment() {
         }
 
         return view
+    }
+
+    fun processResults(results: List<Result>?) {
+        if (results != null) {
+            val itemsList = mutableListOf<GalleryItem>()
+            for (i in 0..results.count() - 1) {
+                val deviationid = results[i].deviationid
+                val url = results[i].url
+                val title = results[i].title
+                itemsList.add(GalleryItem(deviationid, url, title))
+            }
+            recyclerViewAdapter.setItems(itemsList)
+        }
     }
 
     override fun onResume() {

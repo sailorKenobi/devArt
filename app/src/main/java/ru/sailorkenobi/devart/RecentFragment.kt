@@ -58,12 +58,9 @@ class RecentFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_recent_list, container, false)
 
-        //testRequest()
-
         var itemsList = mutableListOf<GalleryItem>()
-        //var dummyItemsList = mutableListOf<DummyItem>()
 
-        val token = ""
+        val token = "f46e815f21c21d0ef89ce9824f5b49be8f91423d180f8934d7"
         var recentCall = getNewestDataService.get("Bearer ${token}")
 
         // Set the adapter
@@ -75,31 +72,33 @@ class RecentFragment : Fragment() {
             }
         }
 
+        if (recentCall != null) {
+            recentCall.enqueue(object : Callback<ResultsList?> {
+                override fun onResponse(
+                    call: Call<ResultsList?>,
+                    response: Response<ResultsList?>
+                ) {
+                    Log.d("RetroFit", "onResponse")
+                    processResults(response.body()?.results)
+                    //generateRecentList(response.body().getNoticeArrayList())
+                }
+
+                override fun onFailure(call: Call<ResultsList?>?, t: Throwable) {
+                    Log.d("RetroFit", "onFailure")
+                }
+            })
+        }
+
+        /*
         lifecycleScope.launch {
-            //itemsList = getLatest()
-
-            if (recentCall != null) {
-                recentCall.enqueue(object : Callback<ResultsList?> {
-                    override fun onResponse(
-                        call: Call<ResultsList?>,
-                        response: Response<ResultsList?>
-                    ) {
-                        Log.d("RetroFit", "onResponse")
-                        processResults(response.body()?.results)
-                        //generateRecentList(response.body().getNoticeArrayList())
-                    }
-
-                    override fun onFailure(call: Call<ResultsList?>?, t: Throwable) {
-                        Log.d("RetroFit", "onFailure")
-                    }
-                })
-            }
+            itemsList = getLatest()
 
             //Log.d("showItems", "items count ${itemsList.count()}")
             withContext(Dispatchers.Main) {
                 recyclerViewAdapter.setItems(itemsList)
             }
         }
+         */
 
         return view
     }
@@ -114,21 +113,6 @@ class RecentFragment : Fragment() {
                 itemsList.add(GalleryItem(deviationid, url, title))
             }
             recyclerViewAdapter.setItems(itemsList)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        //
-    }
-
-    fun testRequest() {
-        lifecycleScope.launch {
-            //val res = GetWithToken("https://www.deviantart.com/api/v1/oauth2/browse/newest?limit=5")
-            //Log.d("TestResult", res)
-            val res = getLatest()
-            Log.d("TestResult", res.count().toString())
         }
     }
 

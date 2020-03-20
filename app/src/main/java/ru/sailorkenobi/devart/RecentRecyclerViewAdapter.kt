@@ -1,16 +1,24 @@
 package ru.sailorkenobi.devart
 
-import androidx.recyclerview.widget.RecyclerView
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
-
-
+import androidx.recyclerview.widget.RecyclerView
 import ru.sailorkenobi.devart.RecentFragment.OnListFragmentInteractionListener
 import ru.sailorkenobi.devart.dummy.DummyContent.DummyItem
-
-import kotlinx.android.synthetic.main.fragment_recent.view.*
+import ru.sailorkenobi.devart.R.drawable.icon_deviantart_512
+import ru.sailorkenobi.devart.R.layout.recent_item
+import kotlinx.android.synthetic.main.recent_item.*
+import kotlinx.android.synthetic.main.recent_item.view.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.withContext
+import androidx.lifecycle.lifecycleScope
+import java.util.logging.Logger
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
@@ -39,16 +47,21 @@ class RecentRecyclerViewAdapter(
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_recent, parent, false)
-        return ViewHolder(view)
-    }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        //holder.mIdView.text = item.id
-        holder.mContentView.text = item.title
+
+        //holder.titleView.text = item.title
+        val drawable = holder.itemView.context.resources.getDrawable(icon_deviantart_512)
+        holder.bindDrawable(drawable)
+
+        GlobalScope.launch {
+            val image = loadImage(item.preview)
+            withContext(Dispatchers.Main) {
+                if (image != null)
+                    holder.bindBitmap(image)
+            }
+        }
+
 
         with(holder.mView) {
             tag = item
@@ -56,14 +69,41 @@ class RecentRecyclerViewAdapter(
         }
     }
 
+    suspend fun loadImage(url: String?): Bitmap? {
+         val res = withContext(Dispatchers.IO) {
+             val res = url?.let { GetImage(it) }
+             if (res != null)
+                 return@withContext res
+             else {
+                 Log.d("loadImage", "${url} failed")
+                 return@withContext null
+             }
+         }
+        return res
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(recent_item, parent, false)
+        return ViewHolder(view)
+    }
+
     override fun getItemCount(): Int = mValues.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         //val mIdView: TextView = mView.item_number
-        val mContentView: TextView = mView.content
+        //val titleView: TextView = mView.item_title
+        val imageView: ImageView = mView.item_image
 
         override fun toString(): String {
-            return super.toString() + " '" + mContentView.text + "'"
+            return super.toString() + " '" //+ titleView.text + "'"
+        }
+
+        fun bindDrawable(drawable: Drawable) {
+            imageView.setImageDrawable(drawable)
+        }
+
+        fun bindBitmap(bitmap: Bitmap) {
+            imageView.setImageBitmap(bitmap)
         }
     }
 }

@@ -52,11 +52,11 @@ class Result {
     @Expose
     var allowsComments: Boolean? = null
 
-/*    @SerializedName("preview")
+    @SerializedName("preview")
     @Expose
     var preview: Preview? = null
 
-    @SerializedName("content")
+/*    @SerializedName("content")
     @Expose
     var content: javax.swing.text.AbstractDocument.Content? = null
 

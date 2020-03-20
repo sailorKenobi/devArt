@@ -110,7 +110,8 @@ class RecentFragment : Fragment() {
                 val deviationid = results[i].deviationid
                 val url = results[i].url
                 val title = results[i].title
-                itemsList.add(GalleryItem(deviationid, url, title))
+                val preview = results[i].preview?.src
+                itemsList.add(GalleryItem(deviationid, url, title, preview))
             }
             recyclerViewAdapter.setItems(itemsList)
         }

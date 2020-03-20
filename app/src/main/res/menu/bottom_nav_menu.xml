@@ -4,15 +4,15 @@
         android:id="@+id/action_newest"
         android:enabled="true"
         android:icon="@drawable/update_24px"
-        android:title="Newest" />
+        android:title="@string/menu_recent" />
     <item
         android:id="@+id/action_hot"
         android:enabled="true"
         android:icon="@drawable/whatshot_24px"
-        android:title="Hot" />
+        android:title="@string/menu_hot" />
     <item
         android:id="@+id/action_popular"
         android:enabled="true"
         android:icon="@drawable/grade_24px"
-        android:title="Popular" />
+        android:title="@string/menu_popular" />
 </menu>

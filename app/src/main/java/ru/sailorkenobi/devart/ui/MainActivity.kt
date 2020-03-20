@@ -14,19 +14,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(activity_main)
 
+        setTitle(R.string.title_recent)
         loadFragment(RecentFragment())
 
         navigationView.setOnNavigationItemSelectedListener OnNavigationItemSelectedListener@{ menuItem ->
             when (menuItem.itemId) {
                 R.id.action_newest -> {
+                    setTitle(R.string.title_recent)
                     loadFragment(RecentFragment())
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.action_hot -> {
+                    setTitle(R.string.title_hot)
                     loadFragment(HotFragment())
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.action_popular -> {
+                    setTitle(R.string.title_popular)
                     loadFragment(PopularFragment())
                     return@OnNavigationItemSelectedListener true
                 }

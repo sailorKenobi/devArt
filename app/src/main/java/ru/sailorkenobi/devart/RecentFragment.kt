@@ -25,7 +25,7 @@ import ru.sailorkenobi.devart.model.ResultsList
 class RecentFragment : Fragment() {
 
     // TODO: Customize parameters
-    private var columnCount = 2
+    private var columnCount = 3
 
     private var listener: OnListFragmentInteractionListener? = null
 
@@ -43,7 +43,6 @@ class RecentFragment : Fragment() {
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
-
     }
 
     override fun onCreateView(
@@ -53,10 +52,6 @@ class RecentFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_recent_list, container, false)
 
         var itemsList = mutableListOf<GalleryItem>()
-
-        val token = "f46e815f21c21d0ef89ce9824f5b49be8f91423d180f8934d7"
-        var recentCall = getNewestDataService.get("Bearer ${token}")
-
         // Set the adapter
         if (view is RecyclerView) {
             recyclerViewAdapter = RecentRecyclerViewAdapter(itemsList, listener)
@@ -66,6 +61,7 @@ class RecentFragment : Fragment() {
             }
         }
 
+        var recentCall = getNewestDataService.get("Bearer $api_token")
         if (recentCall != null) {
             recentCall.enqueue(object : Callback<ResultsList?> {
                 override fun onResponse(
@@ -73,8 +69,9 @@ class RecentFragment : Fragment() {
                     response: Response<ResultsList?>
                 ) {
                     Log.d("RetroFit", "onResponse")
-                    processResults(response.body()?.results)
-                    //generateRecentList(response.body().getNoticeArrayList())
+
+                    val results =  processApiResults(response.body()?.results)
+                    recyclerViewAdapter.setItems(results)
                 }
 
                 override fun onFailure(call: Call<ResultsList?>?, t: Throwable) {
@@ -84,20 +81,6 @@ class RecentFragment : Fragment() {
         }
 
         return view
-    }
-
-    fun processResults(results: List<Result>?) {
-        if (results != null) {
-            val itemsList = mutableListOf<GalleryItem>()
-            for (i in 0..results.count() - 1) {
-                val deviationid = results[i].deviationid
-                val url = results[i].url
-                val title = results[i].title
-                val preview = results[i].preview?.src
-                itemsList.add(GalleryItem(deviationid, url, title, preview))
-            }
-            recyclerViewAdapter.setItems(itemsList)
-        }
     }
 
     override fun onAttach(context: Context) {

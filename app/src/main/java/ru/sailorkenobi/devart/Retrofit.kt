@@ -28,6 +28,13 @@ object RetrofitInstance {
 }
 
 interface GetNewestDataService {
-    @GET("api/v1/oauth2/browse/newest?limit=20")
+    @GET("api/v1/oauth2/browse/newest?limit=30")
+    fun get(@Header("Authorization") authorization: String?): Call<ResultsList?>?
+}
+
+interface GetHotDataService {
+    @GET("api/v1/oauth2/browse/hot?limit=30")
+    fun get(@Header("Authorization") authorization: String?): Call<ResultsList?>?
+}
     fun get(@Header("Authorization") authorization: String?): Call<ResultsList?>?
 }

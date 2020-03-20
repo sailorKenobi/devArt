@@ -1,4 +1,4 @@
-package ru.sailorkenobi.devart
+package ru.sailorkenobi.devart.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,12 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ru.sailorkenobi.devart.GalleryItem
+import ru.sailorkenobi.devart.R
+import ru.sailorkenobi.devart.RecentRecyclerViewAdapter
 
 abstract class GalleryFragment : Fragment() {
 
     private var columnCount = 3
 
     private lateinit var recyclerViewAdapter: RecentRecyclerViewAdapter
+
+    abstract fun pollData(recyclerViewAdapter: RecentRecyclerViewAdapter)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +36,8 @@ abstract class GalleryFragment : Fragment() {
         var itemsList = mutableListOf<GalleryItem>()
         // Set the adapter
         if (view is RecyclerView) {
-            recyclerViewAdapter = RecentRecyclerViewAdapter(itemsList, null)
+            recyclerViewAdapter =
+                RecentRecyclerViewAdapter(itemsList, null)
             with(view) {
                 layoutManager = GridLayoutManager(context, columnCount)
                 adapter = recyclerViewAdapter
@@ -42,8 +48,6 @@ abstract class GalleryFragment : Fragment() {
 
         return view
     }
-
-    abstract fun pollData(recyclerViewAdapter: RecentRecyclerViewAdapter)
 
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name

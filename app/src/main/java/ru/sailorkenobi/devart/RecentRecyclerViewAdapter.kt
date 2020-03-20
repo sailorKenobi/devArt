@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.sailorkenobi.devart.R.drawable.icon_deviantart_512
 import ru.sailorkenobi.devart.R.layout.recent_item
+import ru.sailorkenobi.devart.ui.GalleryFragment
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the

@@ -12,32 +12,6 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-
-fun getUrlString(url: String): String {
-    var stringData = ""
-    val url = URL(url)
-    val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
-    try {
-        val out = ByteArrayOutputStream()
-        val inputStream: InputStream = connection.getInputStream()
-        if (connection.getResponseCode() !== HttpURLConnection.HTTP_OK) {
-            throw IOException(connection.getResponseMessage().toString() + ": with " + url)
-        }
-        var bytesRead = 0
-        val buffer = ByteArray(1024)
-        while (inputStream.read(buffer).also({ bytesRead = it }) > 0) {
-            out.write(buffer, 0, bytesRead)
-        }
-        out.close()
-        val byteData = out.toByteArray()
-        stringData = byteData.toString()
-        Log.d("DeviantHelper", stringData)
-    } finally {
-        connection.disconnect()
-    }
-    return stringData
-}
-
 fun pollRecentData(recyclerViewAdapter: RecentRecyclerViewAdapter) {
     val getNewestDataService = RetrofitInstance.retrofitInstance!!.create<GetNewestDataService>(
         GetNewestDataService::class.java
@@ -93,4 +67,29 @@ fun processApiResults(results: List<Result>?): List<GalleryItem> {
         }
     }
     return itemsList
+}
+
+fun getUrlString(url: String): String {
+    var stringData = ""
+    val url = URL(url)
+    val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+    try {
+        val out = ByteArrayOutputStream()
+        val inputStream: InputStream = connection.getInputStream()
+        if (connection.getResponseCode() !== HttpURLConnection.HTTP_OK) {
+            throw IOException(connection.getResponseMessage().toString() + ": with " + url)
+        }
+        var bytesRead = 0
+        val buffer = ByteArray(1024)
+        while (inputStream.read(buffer).also({ bytesRead = it }) > 0) {
+            out.write(buffer, 0, bytesRead)
+        }
+        out.close()
+        val byteData = out.toByteArray()
+        stringData = byteData.toString()
+        Log.d("DeviantHelper", stringData)
+    } finally {
+        connection.disconnect()
+    }
+    return stringData
 }

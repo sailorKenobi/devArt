@@ -13,7 +13,30 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-val api_token = ""
+val api_token = "a0f13d47a29682b2e01f93fed69611e7e9df72490b0a2f0fc1"
+
+suspend fun GetImage(myURL: String?): Bitmap? {
+    val result = withContext(Dispatchers.IO)
+    {
+        val inputStream: InputStream
+
+        val url: URL = URL(myURL)
+
+        val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
+
+        conn.connect()
+
+        Log.d("GetImage", conn.responseMessage)
+
+        inputStream = conn.inputStream
+
+        if (inputStream != null)
+            return@withContext  BitmapFactory.decodeStream(inputStream)
+        else
+            return@withContext null
+    }
+    return result
+}
 
 suspend fun getLatest(): MutableList<GalleryItem> {
     val result = mutableListOf<GalleryItem>()
@@ -53,34 +76,6 @@ suspend fun GetWithToken(myURL: String): String? {
             return@withContext response.body?.string()
         else
             return@withContext "Error while making HTTP GET ${myURL} ${response.body?.string()}"
-    }
-    return result
-}
-
-suspend fun GetImage(myURL: String?): Bitmap? {
-    val result = withContext(Dispatchers.IO)
-    {
-        val inputStream: InputStream
-
-        // create URL
-        val url: URL = URL(myURL)
-
-        // create HttpURLConnection
-        val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
-
-        // make GET request to the given URL
-        conn.connect()
-
-        Log.d("GetImage", conn.responseMessage)
-
-        // receive response as inputStream
-        inputStream = conn.inputStream
-
-        // convert inputstream to string
-        if (inputStream != null)
-            return@withContext  BitmapFactory.decodeStream(inputStream)
-        else
-            return@withContext null
     }
     return result
 }

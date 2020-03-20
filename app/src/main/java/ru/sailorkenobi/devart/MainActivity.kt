@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.action_popular -> {
-                    loadFragment(RecentFragment())
+                    loadFragment(PopularFragment())
                     return@OnNavigationItemSelectedListener true
                 }
             }

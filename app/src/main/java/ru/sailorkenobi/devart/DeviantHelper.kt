@@ -1,7 +1,11 @@
 package ru.sailorkenobi.devart
 
 import android.util.Log
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ru.sailorkenobi.devart.model.Result
+import ru.sailorkenobi.devart.model.ResultsList
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
@@ -32,6 +36,49 @@ fun getUrlString(url: String): String {
         connection.disconnect()
     }
     return stringData
+}
+
+fun pollRecentData(recyclerViewAdapter: RecentRecyclerViewAdapter) {
+    val getNewestDataService = RetrofitInstance.retrofitInstance!!.create<GetNewestDataService>(
+        GetNewestDataService::class.java
+    )
+    val apiCall = getNewestDataService.get("Bearer $api_token")
+    pollAdapterFromApi(recyclerViewAdapter, apiCall)
+}
+
+fun pollHotData(recyclerViewAdapter: RecentRecyclerViewAdapter) {
+    val getHotDataService = RetrofitInstance.retrofitInstance!!.create<GetHotDataService>(
+        GetHotDataService::class.java
+    )
+    val apiCall = getHotDataService.get("Bearer $api_token")
+    pollAdapterFromApi(recyclerViewAdapter, apiCall)
+}
+
+fun pollPopularData(recyclerViewAdapter: RecentRecyclerViewAdapter) {
+    val getPopularDataService = RetrofitInstance.retrofitInstance!!.create<GetPopularService>(
+        GetPopularService::class.java
+    )
+    val apiCall = getPopularDataService.get("Bearer $api_token")
+    pollAdapterFromApi(recyclerViewAdapter, apiCall)
+}
+
+fun pollAdapterFromApi(recyclerViewAdapter: RecentRecyclerViewAdapter, call: Call<ResultsList?>?) {
+    if (call != null) {
+        call.enqueue(object : Callback<ResultsList?> {
+            override fun onResponse(
+                call: Call<ResultsList?>,
+                response: Response<ResultsList?>
+            ) {
+
+                val results =  processApiResults(response.body()?.results)
+                recyclerViewAdapter.setItems(results)
+            }
+
+            override fun onFailure(call: Call<ResultsList?>?, t: Throwable) {
+                Log.d("RetroFit", "onFailure")
+            }
+        })
+    }
 }
 
 fun processApiResults(results: List<Result>?): List<GalleryItem> {

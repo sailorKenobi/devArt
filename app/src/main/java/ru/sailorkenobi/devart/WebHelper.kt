@@ -13,6 +13,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
+val api_token = ""
 
 suspend fun getLatest(): MutableList<GalleryItem> {
     val result = mutableListOf<GalleryItem>()
@@ -37,7 +38,6 @@ suspend fun getLatest(): MutableList<GalleryItem> {
 }
 
 suspend fun GetWithToken(myURL: String): String? {
-    val token = "0c47751d9f3a34faba22bb3df76aac0498fb6bff66dc372d5d"
     val result = withContext(Dispatchers.IO)
     {
         val client: OkHttpClient = OkHttpClient().newBuilder()
@@ -45,7 +45,7 @@ suspend fun GetWithToken(myURL: String): String? {
         val request: Request = Request.Builder()
             .url(myURL)
             .method("GET", null)
-            .addHeader("Authorization", "Bearer ${token}")
+            .addHeader("Authorization", "Bearer $api_token")
             .build()
         val response: Response = client.newCall(request).execute()
 

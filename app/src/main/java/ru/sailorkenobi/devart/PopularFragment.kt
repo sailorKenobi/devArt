@@ -1,7 +1,7 @@
 package ru.sailorkenobi.devart
 
-class HotFragment : GalleryFragment() {
+class PopularFragment : GalleryFragment() {
     override fun pollData(recyclerViewAdapter: RecentRecyclerViewAdapter) {
-        pollHotData(recyclerViewAdapter)
+        pollPopularData(recyclerViewAdapter)
     }
 }

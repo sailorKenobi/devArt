@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.sailorkenobi.devart.R.drawable.icon_deviantart_512
 import ru.sailorkenobi.devart.R.layout.recent_item
-import ru.sailorkenobi.devart.RecentFragment.OnListFragmentInteractionListener
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
@@ -24,7 +23,7 @@ import ru.sailorkenobi.devart.RecentFragment.OnListFragmentInteractionListener
  */
 class RecentRecyclerViewAdapter(
     private val mValues: MutableList<GalleryItem>,
-    private val mListener: OnListFragmentInteractionListener?
+    private val mListener: GalleryFragment.OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<RecentRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
@@ -87,13 +86,7 @@ class RecentRecyclerViewAdapter(
     override fun getItemCount(): Int = mValues.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        //val mIdView: TextView = mView.item_number
-        //val titleView: TextView = mView.item_title
         val imageView: ImageView = mView.item_image
-
-        override fun toString(): String {
-            return super.toString() + " '" //+ titleView.text + "'"
-        }
 
         fun bindDrawable(drawable: Drawable) {
             imageView.setImageDrawable(drawable)

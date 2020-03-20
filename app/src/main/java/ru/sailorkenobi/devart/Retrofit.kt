@@ -36,5 +36,8 @@ interface GetHotDataService {
     @GET("api/v1/oauth2/browse/hot?limit=30")
     fun get(@Header("Authorization") authorization: String?): Call<ResultsList?>?
 }
+
+interface GetPopularService {
+    @GET("api/v1/oauth2/browse/popular?limit=30")
     fun get(@Header("Authorization") authorization: String?): Call<ResultsList?>?
 }

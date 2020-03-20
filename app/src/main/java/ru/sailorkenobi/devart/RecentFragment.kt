@@ -7,17 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.sailorkenobi.devart.RetrofitInstance.retrofitInstance
-import ru.sailorkenobi.devart.dummy.DummyContent.DummyItem
 import ru.sailorkenobi.devart.model.Result
 import ru.sailorkenobi.devart.model.ResultsList
 
@@ -34,7 +29,6 @@ class RecentFragment : Fragment() {
 
     private var listener: OnListFragmentInteractionListener? = null
 
-    lateinit var dummyItemsList: MutableList<DummyItem>
     private lateinit var recyclerViewAdapter: RecentRecyclerViewAdapter
 
     private lateinit var getNewestDataService: GetNewestDataService
@@ -89,17 +83,6 @@ class RecentFragment : Fragment() {
             })
         }
 
-        /*
-        lifecycleScope.launch {
-            itemsList = getLatest()
-
-            //Log.d("showItems", "items count ${itemsList.count()}")
-            withContext(Dispatchers.Main) {
-                recyclerViewAdapter.setItems(itemsList)
-            }
-        }
-         */
-
         return view
     }
 
@@ -144,7 +127,7 @@ class RecentFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem?)
+        fun onListFragmentInteraction(item: GalleryItem?)
     }
 
     companion object {

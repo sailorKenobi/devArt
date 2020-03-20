@@ -9,10 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.IOException
 import java.io.InputStream
-import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -40,6 +37,7 @@ suspend fun getLatest(): MutableList<GalleryItem> {
 }
 
 suspend fun GetWithToken(myURL: String): String? {
+    val token = "0c47751d9f3a34faba22bb3df76aac0498fb6bff66dc372d5d"
     val result = withContext(Dispatchers.IO)
     {
         val client: OkHttpClient = OkHttpClient().newBuilder()
@@ -55,33 +53,6 @@ suspend fun GetWithToken(myURL: String): String? {
             return@withContext response.body?.string()
         else
             return@withContext "Error while making HTTP GET ${myURL} ${response.body?.string()}"
-    }
-    return result
-}
-
-suspend fun HttpGet(myURL: String?): String? {
-    val result = withContext(Dispatchers.IO)
-    {
-        val inputStream: InputStream
-
-        // create URL
-        val url: URL = URL(myURL)
-
-        // create HttpURLConnection
-        val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
-
-        // make GET request to the given URL
-        conn.connect()
-
-        // receive response as inputStream
-        inputStream = conn.inputStream
-
-        // convert inputstream to string
-        if (inputStream != null)
-            //return@withContext convertInputStreamToString(inputStream)
-            return@withContext convertInputStreamToString(inputStream)
-        else
-            return@withContext "Error while making HTTP GET ${myURL}"
     }
     return result
 }
@@ -111,51 +82,5 @@ suspend fun GetImage(myURL: String?): Bitmap? {
         else
             return@withContext null
     }
-    return result
-}
-
-suspend fun OkGetImage(myURL: String): Bitmap? {
-    Log.d("OkGetImage", "url ${myURL}")
-
-    val client = OkHttpClient()
-
-    val request: Request = Request.Builder()
-        .url(myURL)
-        .build()
-
-    var response: Response? = null
-    var mIcon11: Bitmap? = null
-    try {
-        response = client.newCall(request).execute()
-    } catch (e: IOException) {
-        e.printStackTrace()
-    }
-    if (response != null) {
-        if (response.isSuccessful) {
-            try {
-                Log.d("OkGetImage", "response.isSuccessful")
-                mIcon11 = BitmapFactory.decodeStream(response!!.body!!.byteStream())
-                //Log.d("OkGetImage", "height ${mIcon11.height}")
-
-            } catch (e: java.lang.Exception) {
-                Log.e("OkGetImage", e.message)
-                e.printStackTrace()
-            }
-        }
-    }
-    return mIcon11
-}
-
-private fun convertInputStreamToString(inputStream: InputStream): String {
-    val bufferedReader: BufferedReader? = BufferedReader(InputStreamReader(inputStream))
-    var line:String? = bufferedReader?.readLine()
-    var result:String = ""
-
-    while (line != null) {
-        result += line
-        line = bufferedReader?.readLine()
-    }
-
-    inputStream.close()
     return result
 }

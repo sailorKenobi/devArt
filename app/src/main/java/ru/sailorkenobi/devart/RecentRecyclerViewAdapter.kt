@@ -7,18 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import ru.sailorkenobi.devart.RecentFragment.OnListFragmentInteractionListener
-import ru.sailorkenobi.devart.dummy.DummyContent.DummyItem
+import kotlinx.android.synthetic.main.recent_item.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.sailorkenobi.devart.R.drawable.icon_deviantart_512
 import ru.sailorkenobi.devart.R.layout.recent_item
-import kotlinx.android.synthetic.main.recent_item.*
-import kotlinx.android.synthetic.main.recent_item.view.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.withContext
-import androidx.lifecycle.lifecycleScope
-import java.util.logging.Logger
+import ru.sailorkenobi.devart.RecentFragment.OnListFragmentInteractionListener
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
@@ -34,7 +31,7 @@ class RecentRecyclerViewAdapter(
 
     init {
         mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyItem
+            val item = v.tag as GalleryItem
             // Notify the active callbacks interface (the activity, if the fragment is attached to
             // one) that an item has been selected.
             mListener?.onListFragmentInteraction(item)

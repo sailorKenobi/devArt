@@ -56,13 +56,13 @@ class Result {
     @Expose
     var preview: Preview? = null
 
-/*    @SerializedName("content")
+    @SerializedName("content")
     @Expose
-    var content: javax.swing.text.AbstractDocument.Content? = null
+    var content: Content? = null
 
     @SerializedName("thumbs")
     @Expose
-    var thumbs: List<Thumb>? = null*/
+    var thumbs: List<Thumb>? = null
 
     @SerializedName("is_mature")
     @Expose

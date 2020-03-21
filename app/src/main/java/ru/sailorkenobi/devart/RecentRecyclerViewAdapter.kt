@@ -52,7 +52,7 @@ class RecentRecyclerViewAdapter(
         holder.bindDrawable(drawable)
 
         GlobalScope.launch {
-            val image = loadImage(item.preview)
+            val image = loadImage(item.thumbSrc)
             withContext(Dispatchers.Main) {
                 if (image != null)
                     holder.bindBitmap(image)

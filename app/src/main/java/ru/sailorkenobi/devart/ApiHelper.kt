@@ -62,8 +62,10 @@ fun processApiResults(results: List<Result>?): List<GalleryItem> {
             val deviationid = results[i].deviationid
             val url = results[i].url
             val title = results[i].title
+            val thumb = results[i].thumbs?.get(2)?.src
             val preview = results[i].preview?.src
-            itemsList.add(GalleryItem(deviationid, url, title, preview))
+            val content = results[i].content?.src
+            itemsList.add(GalleryItem(deviationid, url, title, thumb, preview, content))
         }
     }
     return itemsList

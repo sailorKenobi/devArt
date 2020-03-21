@@ -13,7 +13,7 @@ import ru.sailorkenobi.devart.RecentRecyclerViewAdapter
 
 abstract class GalleryFragment : Fragment() {
 
-    private var columnCount = 3
+    private var columnCount = 4
 
     private lateinit var recyclerViewAdapter: RecentRecyclerViewAdapter
 

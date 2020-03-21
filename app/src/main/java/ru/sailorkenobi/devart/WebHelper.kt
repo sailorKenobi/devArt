@@ -38,7 +38,7 @@ suspend fun GetImage(myURL: String?): Bitmap? {
     return result
 }
 
-suspend fun getLatest(): MutableList<GalleryItem> {
+/*suspend fun getLatest(): MutableList<GalleryItem> {
     val result = mutableListOf<GalleryItem>()
     try {
         val jsonString = GetWithToken("https://www.deviantart.com/api/v1/oauth2/browse/newest?limit=20")
@@ -51,14 +51,14 @@ suspend fun getLatest(): MutableList<GalleryItem> {
                 val deviationid = jsonObject.getString("deviationid")
                 val url = jsonObject.getString("url")
                 val title = jsonObject.getString("title")
-                result.add(GalleryItem(deviationid, url, title, ""))
+                result.add(GalleryItem(deviationid, url, title, "", ""))
             }
         }
     } catch (e: Exception) {
         Log.e("GetLatest", "Failed get items", e)
     }
     return result
-}
+}*/
 
 suspend fun GetWithToken(myURL: String): String? {
     val result = withContext(Dispatchers.IO)

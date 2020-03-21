@@ -12,5 +12,6 @@
     <string name="title_recent">devArt: Recent</string>
     <string name="title_hot">devArt: Hot</string>
     <string name="title_popular">devArt: Popular</string>
+    <string name="gallery_image_desc">Gallery image</string>
 
 </resources>
